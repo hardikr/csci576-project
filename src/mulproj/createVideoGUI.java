@@ -23,7 +23,7 @@ public class createVideoGUI {
     public JMenu fileMenu;
     public JMenuItem openMenuItem;
     public JFileChooser jFileChooser;
-    public JButton playBtn;
+    public JButton resetBtn;
     public JSlider jSlider1;
     public String video1URL;
     
@@ -34,8 +34,8 @@ public class createVideoGUI {
         fileMenu = new JMenu();
         openMenuItem = new JMenuItem();
         jFileChooser = new JFileChooser();
-        playBtn = new JButton();
-        jSlider1 = new JSlider(0,719,0);
+        resetBtn = new JButton();
+        jSlider1 = new JSlider();
         
         initialGUISetup();
         setupMenu();
@@ -65,7 +65,7 @@ public class createVideoGUI {
                         .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(116, 116, 116)
-                        .addComponent(playBtn)))
+                        .addComponent(resetBtn)))
                 .addContainerGap(468, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -76,7 +76,7 @@ public class createVideoGUI {
                 .addGap(20, 20, 20)
                 .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
-                .addComponent(playBtn)
+                .addComponent(resetBtn)
                 .addContainerGap(102, Short.MAX_VALUE))
         );
         
@@ -84,16 +84,17 @@ public class createVideoGUI {
     }
     
     private void setupButtons() {
-        playBtn.setText("Play");
-        playBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        resetBtn.setText("Reset");
+        resetBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                playBtnMouseClicked(evt);
+                resetBtnMouseClicked(evt);
             }
         });
     }
     
     private void setupSlider1() {
+        jSlider1.setValue(0);
         jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
             @Override
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -110,9 +111,9 @@ public class createVideoGUI {
         }
     }
     
-    private void playBtnMouseClicked(java.awt.event.MouseEvent evt) {
+    private void resetBtnMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-       
+        jSlider1.setValue(0);
     }
    
    
@@ -141,13 +142,19 @@ public class createVideoGUI {
         frame.setJMenuBar(menuBar);
     }
     
+    private void setSliderRange(int frames) {
+        jSlider1.setMinimum(0);
+        jSlider1.setMaximum(frames);
+        jSlider1.setValue(0);
+    }
+    
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) throws FileNotFoundException, IOException {                                             
         int returnVal = jFileChooser.showOpenDialog(frame);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
             //java.io.File file = jFileChooser.getSelectedFile();
             video1URL = jFileChooser.getSelectedFile().toString(); //file.toString();
             AuthoringTool.videoLoaded(video1URL);
-            
+            setSliderRange((int)AuthoringTool.NUMFRAMES_VID1-1);
         }
     }                                            
     
