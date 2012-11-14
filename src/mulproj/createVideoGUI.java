@@ -25,6 +25,8 @@ public class createVideoGUI {
     public JFrame frame;
     public JLabel video1Label;
     public JLabel video2Label;
+    public JLabel vid1FrameNum;
+    public JLabel vid2FrameNum;
     public JMenuBar menuBar;
     public JMenu fileMenu;
     public JMenuItem openVideo1MenuItem;
@@ -48,6 +50,8 @@ public class createVideoGUI {
         resetBtn = new JButton();
         jSlider1 = new JSlider();
         jSlider2 = new JSlider();
+        vid1FrameNum = new JLabel();
+        vid2FrameNum = new JLabel();
         
         initialGUISetup();
         setupMenu();
@@ -69,6 +73,12 @@ public class createVideoGUI {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(185, 185, 185))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -80,11 +90,11 @@ public class createVideoGUI {
                         .addComponent(resetBtn)))
                 .addContainerGap(98, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(141, 141, 141)
+                .addComponent(vid1FrameNum)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(185, 185, 185))
+                .addComponent(vid2FrameNum)
+                .addGap(263, 263, 263))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,43 +105,17 @@ public class createVideoGUI {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(video1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(video2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
+                        .addGap(14, 14, 14)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(vid1FrameNum)
+                            .addComponent(vid2FrameNum))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(resetBtn)
-                .addContainerGap(103, Short.MAX_VALUE))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
-        /*
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(frame.getContentPane());
-        frame.getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(video1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(116, 116, 116)
-                        .addComponent(resetBtn)))
-                .addContainerGap(468, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(video1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(resetBtn)
-                .addContainerGap(102, Short.MAX_VALUE))
-        );
-        */
         frame.pack();
     }
     
@@ -168,7 +152,8 @@ public class createVideoGUI {
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {
         JSlider source = (JSlider)evt.getSource();
         if (!source.getValueIsAdjusting()) {
-            System.out.println(source.getValue());
+            //System.out.println(source.getValue());
+            vid1FrameNum.setText("Frame: "+source.getValue());
             AuthoringTool.showFrameSrc(source.getValue());
         }
     }
@@ -176,7 +161,8 @@ public class createVideoGUI {
     private void jSlider2StateChanged(javax.swing.event.ChangeEvent evt) {
         JSlider source = (JSlider)evt.getSource();
         if (!source.getValueIsAdjusting()) {
-            System.out.println(source.getValue());
+            //System.out.println(source.getValue());
+            vid2FrameNum.setText("Frame: "+source.getValue());
             AuthoringTool.showFrameDest(source.getValue());
         }
     }
