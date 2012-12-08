@@ -42,7 +42,7 @@ public class AuthoringTool {
         int numRead = 0;
 
         long numFrames = file.length()/(3*WIDTH*HEIGHT);
-        System.out.println(numFrames);
+//        System.out.println(numFrames);
         NUMFRAMES_VID1 = numFrames;
         
         switch(type) {
@@ -66,7 +66,7 @@ public class AuthoringTool {
   
   public static void showFrameSrc(int curFrame) {
     //gui.setupVideo1(img1);
-    System.out.println("curFrame: "+ curFrame);
+//    System.out.println("curFrame: "+ curFrame);
     int ind=0;
     for(int y = 0; y < HEIGHT; y++){
         for(int x = 0; x < WIDTH; x++){
@@ -86,7 +86,7 @@ public class AuthoringTool {
   
   public static void showFrameDest(int curFrame) {
     //gui.setupVideo1(img1);
-    System.out.println("curFrame: "+ curFrame);
+//    System.out.println("curFrame: "+ curFrame);
     int ind=0;
     for(int y = 0; y < HEIGHT; y++){
         for(int x = 0; x < WIDTH; x++){
@@ -105,7 +105,7 @@ public class AuthoringTool {
   }
   
   public static void playVideo1(String fileName) {
-      System.out.println("FILENAME: "+fileName);
+//      System.out.println("FILENAME: "+fileName);
       gui.setupVideo1(img1);
       try {
         File file = new File(fileName);
@@ -118,7 +118,7 @@ public class AuthoringTool {
         int numRead = 0;
 
         long numFrames = file.length()/(3*WIDTH*HEIGHT);
-        System.out.println(numFrames);
+//        System.out.println(numFrames);
         NUMFRAMES_VID1 = numFrames;
 
         while (offset < bytesSrc.length && (numRead=is.read(bytesSrc, offset, bytesSrc.length-offset)) >= 0) {
@@ -128,10 +128,10 @@ public class AuthoringTool {
         int ind = 0;
         int curFrame = 0;
 
-        System.out.println(bytesSrc.length);
+//        System.out.println(bytesSrc.length);
 
         while(curFrame < numFrames) {
-            System.out.println(curFrame);
+//            System.out.println(curFrame);
             //setSliderPosition
             ind=0;
             for(int y = 0; y < HEIGHT; y++){

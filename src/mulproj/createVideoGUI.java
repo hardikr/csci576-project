@@ -45,7 +45,7 @@ public class createVideoGUI {
     public JTextField hyperlinkName;
     public Hyperlink[] hyperlinkArr;
     public int numHyperlinks = 0;
-    public int curHyperlinkNum = 0;
+    public int curHyperlinkNum = -1;
     public Boolean video1Loaded = false;
     public Boolean video2Loaded = false;
     public int vid1FrameNum;
@@ -217,6 +217,7 @@ public class createVideoGUI {
     
     private void setupHyperlinkDropdown() {
         hyperlinkDropdown.setModel(new javax.swing.DefaultComboBoxModel());
+        hyperlinkDropdown.addItem("None");
         hyperlinkDropdown.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -230,7 +231,16 @@ public class createVideoGUI {
         JComboBox cb = (JComboBox)evt.getSource();
         String newSelection;
         newSelection = String.valueOf(cb.getSelectedItem());
-        System.out.println(newSelection);
+        System.out.println("New selection: "+newSelection);
+        if(newSelection.equals("None")) {
+            System.out.println("Calling remove from dropdown:none");
+            removeHyperlink(-1);
+        } else {
+            // user has selected a previously created link
+            System.out.println("Calling remove from dropdown:else");
+            removeHyperlink(Integer.valueOf(newSelection));
+            drawLink(Integer.valueOf(newSelection));
+        }
     }
     
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {
@@ -257,7 +267,6 @@ public class createVideoGUI {
     
     private void connectVidBtnMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        System.out.println(video1Loaded+";"+video2Loaded);
         if(!(video1Loaded && video2Loaded)) {
             statusLabel.setText("Please load both videos before connecting");
         }
@@ -265,7 +274,8 @@ public class createVideoGUI {
             statusLabel.setText("Please create a hyperlink first!!");
         }
         else {
-            hyperlinkArr[curHyperlinkNum].registerCoords();
+            System.out.println("in connectvidclick, cur: "+curHyperlinkNum);
+            hyperlinkArr[curHyperlinkNum].registerCoords(vid1FrameNum);
             hyperlinkArr[curHyperlinkNum].name = hyperlinkName.getText();
             hyperlinkArr[curHyperlinkNum].destVidURL = video2URL;
             hyperlinkArr[curHyperlinkNum].srcFrameNo[hyperlinkArr[curHyperlinkNum].pos] = vid1FrameNum;
@@ -273,32 +283,82 @@ public class createVideoGUI {
             hyperlinkArr[curHyperlinkNum].printLinks();
             
             // re-enable create-link button ??
+            addHyperlinkBtn.setEnabled(true);
+            
         }
     }
    
     private void addHyperlinkBtnMouseClicked(java.awt.event.MouseEvent evt) {
-        // create the hyperlink
-        curHyperlinkNum = numHyperlinks;
-        hyperlinkArr[curHyperlinkNum] = new Hyperlink();
-        hyperlinkArr[curHyperlinkNum].link = new ResizeRectangle(50,50,150,100);
-        hyperlinkArr[curHyperlinkNum].link.setBounds(0, 0, 352, 288);
-        hyperlinkArr[curHyperlinkNum].link.setOpaque(false);
-        
-        // show it
-        video1Label.add(hyperlinkArr[curHyperlinkNum].link);
-        video1Label.repaint();
-        
-        // gui updates
-        hyperlinkDropdown.addItem(curHyperlinkNum);
-        hyperlinkName.setText("hyperlink-"+curHyperlinkNum);
-        addHyperlinkBtn.setEnabled(false);
-        
-        numHyperlinks++;
+        if(addHyperlinkBtn.isEnabled()) {
+            // check if already hyperlink is drawn ?
+            if(curHyperlinkNum >= 0) {
+                System.out.println("Calling remove from add-hl");
+                removeHyperlink(-1);
+            }
+            
+            // create the hyperlink
+            curHyperlinkNum = numHyperlinks;
+            System.out.println("in addhyperlinkclick, cur: "+curHyperlinkNum);
+            hyperlinkArr[curHyperlinkNum] = new Hyperlink();
+            hyperlinkArr[curHyperlinkNum].link = new ResizeRectangle(50,50,150,100);
+            hyperlinkArr[curHyperlinkNum].link.setBounds(0, 0, 352, 288);
+            hyperlinkArr[curHyperlinkNum].link.setOpaque(false);
+
+            // show it
+            video1Label.add(hyperlinkArr[curHyperlinkNum].link);
+            video1Label.repaint();
+
+            // gui updates
+            hyperlinkDropdown.addItem(curHyperlinkNum);
+            System.out.println("Choosing index : "+(curHyperlinkNum));
+            hyperlinkDropdown.setSelectedItem(curHyperlinkNum);
+            hyperlinkName.setText("hyperlink-"+curHyperlinkNum);
+            addHyperlinkBtn.setEnabled(false);
+
+            numHyperlinks++;
+        }
     }
     
-    private void removeHyperlink() {
-        video1Label.remove(hyperlinkArr[curHyperlinkNum].link);
-        video1Label.repaint();
+    private void removeHyperlink(int selection) {
+        if(selection == -1) {
+            video1Label.remove(hyperlinkArr[curHyperlinkNum].link);
+            video1Label.repaint();
+            hyperlinkDropdown.setSelectedItem("None");
+        } else {
+            if(curHyperlinkNum>=0) {
+                // see if this is a switch rom link x to link y
+                video1Label.remove(hyperlinkArr[curHyperlinkNum].link);
+                video1Label.repaint();
+            }
+            hyperlinkDropdown.setSelectedItem(selection);
+        }
+        curHyperlinkNum = -1; // no hyperlink shown at this moment.
+    }
+    
+    private void drawLink(int num) {
+        // drawing link number num
+        System.out.println("drawing link number "+num);
+        
+        // see if link is already drawn
+        if(curHyperlinkNum >= 0) {
+            System.out.println("Calling remove from add-hl");
+            removeHyperlink(-1);
+        }
+        // set curHyperlinkNum
+        curHyperlinkNum = num;
+        
+        // see if this link was connected
+        if(hyperlinkArr[curHyperlinkNum].connected) {
+            // draw the link
+            System.out.println("Drawing connected: "+curHyperlinkNum);
+            video1Label.add(hyperlinkArr[curHyperlinkNum].link);
+            video1Label.repaint();
+        } else {
+            // draw generic link
+            System.out.println("Drawing generic: "+curHyperlinkNum);
+            video1Label.add(hyperlinkArr[curHyperlinkNum].link);
+            video1Label.repaint();
+        }
     }
     
     private void saveFileBtnMouseClicked(java.awt.event.MouseEvent evt) {
