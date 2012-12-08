@@ -80,6 +80,7 @@ public class AuthoringTool {
         }
     }
     gui.repaint(createVideoGUI.vidType.SOURCE);
+    gui.video1Loaded = true;
   }
   
   public static void showFrameDest(int curFrame) {
@@ -100,6 +101,7 @@ public class AuthoringTool {
         }
     }
     gui.repaint(createVideoGUI.vidType.DEST);
+    gui.video2Loaded = true;
   }
   
   public static void playVideo1(String fileName) {

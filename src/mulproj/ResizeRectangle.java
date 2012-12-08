@@ -13,7 +13,7 @@ import javax.swing.*;
 public class ResizeRectangle extends JPanel {
 
     private int SIZE = 8;
-    private Rectangle2D[] points = {new Rectangle2D.Double(50, 50, SIZE, SIZE), new Rectangle2D.Double(150, 100, SIZE, SIZE)};
+    public Rectangle2D[] points = {new Rectangle2D.Double(50, 50, SIZE, SIZE), new Rectangle2D.Double(150, 100, SIZE, SIZE)};
     Rectangle2D s = new Rectangle2D.Double();
     ShapeResizeHandler ada = new ShapeResizeHandler();
 

@@ -25,14 +25,14 @@ public class createVideoGUI {
     public JFrame frame;
     public JLabel video1Label;
     public JLabel video2Label;
-    public JLabel vid1FrameNum;
-    public JLabel vid2FrameNum;
+    public JLabel vid1FrameNumLabel;
+    public JLabel vid2FrameNumLabel;
     public JMenuBar menuBar;
     public JMenu fileMenu;
     public JMenuItem openVideo1MenuItem;
     public JMenuItem openVideo2MenuItem;
     public JFileChooser jFileChooser;
-    public JButton resetBtn;
+    public JButton connectVidBtn;
     public JSlider jSlider1;
     public JSlider jSlider2;
     public String video1URL;
@@ -43,6 +43,11 @@ public class createVideoGUI {
     public JTextField hyperlinkName;
     public Hyperlink[] hyperlinkArr;
     public int numHyperlinks = 0;
+    public int curHyperlinkNum = 0;
+    public Boolean video1Loaded = false;
+    public Boolean video2Loaded = false;
+    public int vid1FrameNum;
+    public int vid2FrameNum;
     
     public createVideoGUI() {
         frame = new JFrame();
@@ -53,11 +58,11 @@ public class createVideoGUI {
         openVideo1MenuItem = new JMenuItem();
         openVideo2MenuItem = new JMenuItem();
         jFileChooser = new JFileChooser();
-        resetBtn = new JButton();
+        connectVidBtn = new JButton();
         jSlider1 = new JSlider();
         jSlider2 = new JSlider();
-        vid1FrameNum = new JLabel();
-        vid2FrameNum = new JLabel();
+        vid1FrameNumLabel = new JLabel();
+        vid2FrameNumLabel = new JLabel();
         hyperlinkLabel = new JLabel();
         hyperlinkDropdown = new JComboBox();
         addHyperlinkBtn = new JButton();
@@ -89,9 +94,9 @@ public class createVideoGUI {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(141, 141, 141)
-                .addComponent(vid1FrameNum)
+                .addComponent(vid1FrameNumLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(vid2FrameNum)
+                .addComponent(vid2FrameNumLabel)
                 .addGap(307, 307, 307))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +118,7 @@ public class createVideoGUI {
                             .addComponent(hyperlinkName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(116, 116, 116)
-                        .addComponent(resetBtn)))
+                        .addComponent(connectVidBtn)))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -127,8 +132,8 @@ public class createVideoGUI {
                             .addComponent(video2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(vid2FrameNum, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(vid1FrameNum))
+                            .addComponent(vid2FrameNumLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(vid1FrameNumLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -143,18 +148,18 @@ public class createVideoGUI {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(resetBtn)
+                .addComponent(connectVidBtn)
                 .addContainerGap(85, Short.MAX_VALUE))
         );
         frame.pack();
     }
     
     private void setupButtons() {
-        resetBtn.setText("Reset");
-        resetBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        connectVidBtn.setText("Connect Videos");
+        connectVidBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                resetBtnMouseClicked(evt);
+                connectVidBtnMouseClicked(evt);
             }
         });
         
@@ -196,7 +201,8 @@ public class createVideoGUI {
         System.out.println("Slider 1 changed!!");
         if (!source.getValueIsAdjusting()) {
             //System.out.println(source.getValue());
-            vid1FrameNum.setText("Frame: "+source.getValue());
+            vid1FrameNumLabel.setText("Frame: "+source.getValue());
+            vid1FrameNum = source.getValue();
             AuthoringTool.showFrameSrc(source.getValue());
         }
     }
@@ -206,30 +212,42 @@ public class createVideoGUI {
         System.out.println("Slider 2 changed!!");
         if (!source.getValueIsAdjusting()) {
             //System.out.println(source.getValue());
-            vid2FrameNum.setText("Frame: "+source.getValue());
+            vid2FrameNumLabel.setText("Frame: "+source.getValue());
+            vid2FrameNum = source.getValue();
             AuthoringTool.showFrameDest(source.getValue());
         }
     }
     
-    private void resetBtnMouseClicked(java.awt.event.MouseEvent evt) {
+    private void connectVidBtnMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
-        jSlider1.setValue(0);
+        System.out.println(video1Loaded+";"+video2Loaded);
+        if(!(video1Loaded && video2Loaded)) {
+            System.out.println("Please load both videos before connecting");
+        }
+        else {
+            hyperlinkArr[curHyperlinkNum].registerCoords();
+            hyperlinkArr[curHyperlinkNum].destVidURL = video2URL;
+            hyperlinkArr[curHyperlinkNum].srcFrameNo[hyperlinkArr[curHyperlinkNum].pos] = vid1FrameNum;
+            hyperlinkArr[curHyperlinkNum].destFrameNo[hyperlinkArr[curHyperlinkNum].pos] = vid2FrameNum;
+            hyperlinkArr[curHyperlinkNum].printLinks();
+        }
     }
    
     private void addHyperlinkBtnMouseClicked(java.awt.event.MouseEvent evt) {
         // create the hyperlink
-        hyperlinkArr[numHyperlinks] = new Hyperlink();
-        hyperlinkArr[numHyperlinks].link = new ResizeRectangle();
-        hyperlinkArr[numHyperlinks].link.setBounds(0, 0, 352, 288);
-        hyperlinkArr[numHyperlinks].link.setOpaque(false);
+        curHyperlinkNum = numHyperlinks;
+        hyperlinkArr[curHyperlinkNum] = new Hyperlink();
+        hyperlinkArr[curHyperlinkNum].link = new ResizeRectangle();
+        hyperlinkArr[curHyperlinkNum].link.setBounds(0, 0, 352, 288);
+        hyperlinkArr[curHyperlinkNum].link.setOpaque(false);
         
         // show it
-        video1Label.add(hyperlinkArr[numHyperlinks].link);
+        video1Label.add(hyperlinkArr[curHyperlinkNum].link);
         video1Label.repaint();
         
         // gui updates
-        hyperlinkDropdown.addItem(numHyperlinks);
-        hyperlinkName.setText("hyperlink-"+numHyperlinks);
+        hyperlinkDropdown.addItem(curHyperlinkNum);
+        hyperlinkName.setText("hyperlink-"+curHyperlinkNum);
         addHyperlinkBtn.setEnabled(false);
         
         numHyperlinks++;
@@ -323,12 +341,10 @@ public class createVideoGUI {
     
     public void setupVideo1(BufferedImage img) {
         video1Label.setIcon(new ImageIcon(img));
-
     }
     
     public void setupVideo2(BufferedImage img) {
         video2Label.setIcon(new ImageIcon(img));
-
     }
 
    
