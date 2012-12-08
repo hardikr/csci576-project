@@ -20,7 +20,6 @@ public class ResizeRectangle extends JPanel {
     public ResizeRectangle() {
         addMouseListener(ada);
         addMouseMotionListener(ada);
-        System.out.println("constr");
 
     }
 
@@ -38,7 +37,7 @@ public class ResizeRectangle extends JPanel {
                 Math.abs(points[1].getCenterY() - points[0].getCenterY()));
 
         g2.draw(s);
-        System.out.println(points[0].getCenterX()+" "+points[0].getCenterY());
+//        System.out.println(points[0].getCenterX()+" "+points[0].getCenterY());
     }
 
     class ShapeResizeHandler extends MouseAdapter {

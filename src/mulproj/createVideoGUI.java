@@ -33,6 +33,8 @@ public class createVideoGUI {
     public JMenuItem openVideo2MenuItem;
     public JFileChooser jFileChooser;
     public JButton connectVidBtn;
+    public JButton saveFileBtn;
+    public JLabel statusLabel;
     public JSlider jSlider1;
     public JSlider jSlider2;
     public String video1URL;
@@ -59,6 +61,8 @@ public class createVideoGUI {
         openVideo2MenuItem = new JMenuItem();
         jFileChooser = new JFileChooser();
         connectVidBtn = new JButton();
+        saveFileBtn = new JButton();
+        statusLabel = new JLabel();
         jSlider1 = new JSlider();
         jSlider2 = new JSlider();
         vid1FrameNumLabel = new JLabel();
@@ -85,6 +89,7 @@ public class createVideoGUI {
         
         hyperlinkLabel.setText("Hyperlink List");
         hyperlinkName.setText("hyperlink_name");
+        statusLabel.setText("Status: Ready");
     }
     
     private void setLayout() {
@@ -101,11 +106,6 @@ public class createVideoGUI {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(207, 207, 207)
-                        .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(video1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -118,8 +118,19 @@ public class createVideoGUI {
                             .addComponent(hyperlinkName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(116, 116, 116)
-                        .addComponent(connectVidBtn)))
+                        .addComponent(connectVidBtn)
+                        .addGap(141, 141, 141)
+                        .addComponent(saveFileBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(55, 55, 55)
+                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(207, 207, 207)
+                        .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(55, Short.MAX_VALUE))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,8 +159,12 @@ public class createVideoGUI {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(connectVidBtn)
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addComponent(saveFileBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addComponent(statusLabel)
+                .addContainerGap())
         );
         frame.pack();
     }
@@ -168,6 +183,14 @@ public class createVideoGUI {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 addHyperlinkBtnMouseClicked(evt);
+            }
+        });
+        
+        saveFileBtn.setText("Save File");
+        saveFileBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                saveFileBtnMouseClicked(evt);
             }
         });
     }
@@ -222,14 +245,20 @@ public class createVideoGUI {
         // TODO add your handling code here:
         System.out.println(video1Loaded+";"+video2Loaded);
         if(!(video1Loaded && video2Loaded)) {
-            System.out.println("Please load both videos before connecting");
+            statusLabel.setText("Please load both videos before connecting");
+        }
+        else if(numHyperlinks<=0) {
+            statusLabel.setText("Please create a hyperlink first!!");
         }
         else {
             hyperlinkArr[curHyperlinkNum].registerCoords();
+            hyperlinkArr[curHyperlinkNum].name = hyperlinkName.getText();
             hyperlinkArr[curHyperlinkNum].destVidURL = video2URL;
             hyperlinkArr[curHyperlinkNum].srcFrameNo[hyperlinkArr[curHyperlinkNum].pos] = vid1FrameNum;
             hyperlinkArr[curHyperlinkNum].destFrameNo[hyperlinkArr[curHyperlinkNum].pos] = vid2FrameNum;
             hyperlinkArr[curHyperlinkNum].printLinks();
+            
+            // re-enable create-link button ??
         }
     }
    
@@ -251,6 +280,10 @@ public class createVideoGUI {
         addHyperlinkBtn.setEnabled(false);
         
         numHyperlinks++;
+    }
+    
+    private void saveFileBtnMouseClicked(java.awt.event.MouseEvent evt) {
+        
     }
    
     
@@ -345,6 +378,16 @@ public class createVideoGUI {
     
     public void setupVideo2(BufferedImage img) {
         video2Label.setIcon(new ImageIcon(img));
+    }
+    
+    public void setVideo1Loaded() {
+        video1Loaded = true;
+        statusLabel.setText("Source Loaded! : File: "+video1URL);
+    }
+    
+    public void setVideo2Loaded() {
+        video2Loaded = true;
+        statusLabel.setText("Destination Loaded! : File: "+video2URL);
     }
 
    

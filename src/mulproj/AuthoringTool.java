@@ -51,12 +51,14 @@ public class AuthoringTool {
                          while (offset < bytesSrc.length && (numRead=is.read(bytesSrc, offset, bytesSrc.length-offset)) >= 0) {
                             offset += numRead;
                          }
+                         gui.setVideo1Loaded();
                          break;
             case DEST:   bytesDest = null;
                          bytesDest = new byte[(int)len];
                          while (offset < bytesDest.length && (numRead=is.read(bytesDest, offset, bytesDest.length-offset)) >= 0) {
                             offset += numRead;
                          }
+                         gui.setVideo2Loaded();
                          break;
             default:     break;
         }
@@ -80,7 +82,6 @@ public class AuthoringTool {
         }
     }
     gui.repaint(createVideoGUI.vidType.SOURCE);
-    gui.video1Loaded = true;
   }
   
   public static void showFrameDest(int curFrame) {
@@ -101,7 +102,6 @@ public class AuthoringTool {
         }
     }
     gui.repaint(createVideoGUI.vidType.DEST);
-    gui.video2Loaded = true;
   }
   
   public static void playVideo1(String fileName) {
