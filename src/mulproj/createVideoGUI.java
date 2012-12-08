@@ -38,9 +38,10 @@ public class createVideoGUI {
     public String video1URL;
     public String video2URL;
     public JLabel hyperlinkLabel;
-    public JComboBox hyperLinkDropdown;
+    public JComboBox hyperlinkDropdown;
     public JButton addHyperlinkBtn;
-    public ResizeRectangle[] hyperLinkArr;
+    public JTextField hyperlinkName;
+    public Hyperlink[] hyperlinkArr;
     public int numHyperlinks = 0;
     
     public createVideoGUI() {
@@ -58,9 +59,10 @@ public class createVideoGUI {
         vid1FrameNum = new JLabel();
         vid2FrameNum = new JLabel();
         hyperlinkLabel = new JLabel();
-        hyperLinkDropdown = new JComboBox();
+        hyperlinkDropdown = new JComboBox();
         addHyperlinkBtn = new JButton();
-        hyperLinkArr = new ResizeRectangle[20];
+        hyperlinkName = new JTextField();
+        hyperlinkArr = new Hyperlink[20];
         
         initialGUISetup();
         setupMenu();
@@ -77,6 +79,7 @@ public class createVideoGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         hyperlinkLabel.setText("Hyperlink List");
+        hyperlinkName.setText("hyperlink_name");
     }
     
     private void setLayout() {
@@ -104,9 +107,10 @@ public class createVideoGUI {
                         .addComponent(video2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(hyperLinkDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(hyperlinkDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(hyperlinkLabel)
-                            .addComponent(addHyperlinkBtn)))
+                            .addComponent(addHyperlinkBtn)
+                            .addComponent(hyperlinkName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(116, 116, 116)
                         .addComponent(resetBtn)))
@@ -122,9 +126,9 @@ public class createVideoGUI {
                             .addComponent(video1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(video2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(vid1FrameNum)
-                            .addComponent(vid2FrameNum))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(vid2FrameNum, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(vid1FrameNum))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -133,7 +137,9 @@ public class createVideoGUI {
                         .addGap(32, 32, 32)
                         .addComponent(hyperlinkLabel)
                         .addGap(18, 18, 18)
-                        .addComponent(hyperLinkDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(hyperlinkDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(hyperlinkName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
@@ -182,7 +188,7 @@ public class createVideoGUI {
     }
     
     private void setupHyperlinkDropdown() {
-        hyperLinkDropdown.setModel(new javax.swing.DefaultComboBoxModel());
+        hyperlinkDropdown.setModel(new javax.swing.DefaultComboBoxModel());
     }
     
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {
@@ -211,18 +217,22 @@ public class createVideoGUI {
     }
    
     private void addHyperlinkBtnMouseClicked(java.awt.event.MouseEvent evt) {
-        hyperLinkArr[numHyperlinks] = new ResizeRectangle();
-        hyperLinkArr[numHyperlinks].setBounds(0, 0, 352, 288);
-        hyperLinkArr[numHyperlinks].setOpaque(false);
+        // create the hyperlink
+        hyperlinkArr[numHyperlinks] = new Hyperlink();
+        hyperlinkArr[numHyperlinks].link = new ResizeRectangle();
+        hyperlinkArr[numHyperlinks].link.setBounds(0, 0, 352, 288);
+        hyperlinkArr[numHyperlinks].link.setOpaque(false);
         
-        video1Label.add(hyperLinkArr[numHyperlinks]);
+        // show it
+        video1Label.add(hyperlinkArr[numHyperlinks].link);
         video1Label.repaint();
         
-        hyperLinkDropdown.addItem(numHyperlinks);
+        // gui updates
+        hyperlinkDropdown.addItem(numHyperlinks);
+        hyperlinkName.setText("hyperlink-"+numHyperlinks);
+        addHyperlinkBtn.setEnabled(false);
         
         numHyperlinks++;
-        
-        addHyperlinkBtn.setEnabled(false);
     }
    
     
