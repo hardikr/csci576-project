@@ -40,6 +40,8 @@ public class createVideoGUI {
     public JLabel hyperlinkLabel;
     public JComboBox hyperLinkDropdown;
     public JButton addHyperlinkBtn;
+    public ResizeRectangle[] hyperLinkArr;
+    public int numHyperlinks = 0;
     
     public createVideoGUI() {
         frame = new JFrame();
@@ -58,6 +60,7 @@ public class createVideoGUI {
         hyperlinkLabel = new JLabel();
         hyperLinkDropdown = new JComboBox();
         addHyperlinkBtn = new JButton();
+        hyperLinkArr = new ResizeRectangle[20];
         
         initialGUISetup();
         setupMenu();
@@ -208,7 +211,18 @@ public class createVideoGUI {
     }
    
     private void addHyperlinkBtnMouseClicked(java.awt.event.MouseEvent evt) {
+        hyperLinkArr[numHyperlinks] = new ResizeRectangle();
+        hyperLinkArr[numHyperlinks].setBounds(0, 0, 352, 288);
+        hyperLinkArr[numHyperlinks].setOpaque(false);
         
+        video1Label.add(hyperLinkArr[numHyperlinks]);
+        video1Label.repaint();
+        
+        hyperLinkDropdown.addItem(numHyperlinks);
+        
+        numHyperlinks++;
+        
+        addHyperlinkBtn.setEnabled(false);
     }
    
     
