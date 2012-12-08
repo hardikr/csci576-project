@@ -19,7 +19,7 @@ public class Hyperlink {
     String destVidURL;
 
     public Hyperlink() {
-        this.link = new ResizeRectangle();
+        this.link = new ResizeRectangle(50,50,150,100);
         this.nwXc = new double[20];
         this.nwYc = new double[20];
         this.seXc = new double[20];
@@ -39,6 +39,7 @@ public class Hyperlink {
     
     public void printLinks() {
         System.out.println(destVidURL);
+        System.out.println(name);
         for(int i=0;i<=pos;i++) {
             System.out.println("nw: "+nwXc[i]+","+nwYc[i]);
             System.out.println("se: "+seXc[i]+","+seYc[i]);

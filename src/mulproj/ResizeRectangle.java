@@ -13,11 +13,13 @@ import javax.swing.*;
 public class ResizeRectangle extends JPanel {
 
     private int SIZE = 8;
-    public Rectangle2D[] points = {new Rectangle2D.Double(50, 50, SIZE, SIZE), new Rectangle2D.Double(150, 100, SIZE, SIZE)};
+    public Rectangle2D[] points = new Rectangle2D[2];
     Rectangle2D s = new Rectangle2D.Double();
     ShapeResizeHandler ada = new ShapeResizeHandler();
 
-    public ResizeRectangle() {
+    public ResizeRectangle(double nwx, double nwy, double sex, double sey) {
+        this.points[0] = new Rectangle2D.Double(nwx, nwy, SIZE, SIZE);
+        this.points[1] = new Rectangle2D.Double(sex, sey, SIZE, SIZE);
         addMouseListener(ada);
         addMouseMotionListener(ada);
 
@@ -71,13 +73,4 @@ public class ResizeRectangle extends JPanel {
         }
     }
 
-    public static void main(String[] args) {
-
-        JFrame frame = new JFrame("Resize Rectangle");
-        frame.add(new ResizeRectangle());
-        frame.setSize(300, 300);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
 }

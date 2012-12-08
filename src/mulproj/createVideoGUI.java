@@ -217,11 +217,25 @@ public class createVideoGUI {
     
     private void setupHyperlinkDropdown() {
         hyperlinkDropdown.setModel(new javax.swing.DefaultComboBoxModel());
+        hyperlinkDropdown.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlDropdownActionPerformed(evt);
+            }
+        });
+    }
+    
+    private void hlDropdownActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        JComboBox cb = (JComboBox)evt.getSource();
+        String newSelection;
+        newSelection = String.valueOf(cb.getSelectedItem());
+        System.out.println(newSelection);
     }
     
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {
         JSlider source = (JSlider)evt.getSource();
-        System.out.println("Slider 1 changed!!");
+//        System.out.println("Slider 1 changed!!");
         if (!source.getValueIsAdjusting()) {
             //System.out.println(source.getValue());
             vid1FrameNumLabel.setText("Frame: "+source.getValue());
@@ -232,7 +246,7 @@ public class createVideoGUI {
     
     private void jSlider2StateChanged(javax.swing.event.ChangeEvent evt) {
         JSlider source = (JSlider)evt.getSource();
-        System.out.println("Slider 2 changed!!");
+//        System.out.println("Slider 2 changed!!");
         if (!source.getValueIsAdjusting()) {
             //System.out.println(source.getValue());
             vid2FrameNumLabel.setText("Frame: "+source.getValue());
@@ -266,7 +280,7 @@ public class createVideoGUI {
         // create the hyperlink
         curHyperlinkNum = numHyperlinks;
         hyperlinkArr[curHyperlinkNum] = new Hyperlink();
-        hyperlinkArr[curHyperlinkNum].link = new ResizeRectangle();
+        hyperlinkArr[curHyperlinkNum].link = new ResizeRectangle(50,50,150,100);
         hyperlinkArr[curHyperlinkNum].link.setBounds(0, 0, 352, 288);
         hyperlinkArr[curHyperlinkNum].link.setOpaque(false);
         
@@ -280,6 +294,11 @@ public class createVideoGUI {
         addHyperlinkBtn.setEnabled(false);
         
         numHyperlinks++;
+    }
+    
+    private void removeHyperlink() {
+        video1Label.remove(hyperlinkArr[curHyperlinkNum].link);
+        video1Label.repaint();
     }
     
     private void saveFileBtnMouseClicked(java.awt.event.MouseEvent evt) {
