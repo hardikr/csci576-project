@@ -235,11 +235,13 @@ public class createVideoGUI {
         if(newSelection.equals("None")) {
             System.out.println("Calling remove from dropdown:none");
             removeHyperlink(-1);
+            hyperlinkName.setText(" ");
         } else {
             // user has selected a previously created link
             System.out.println("Calling remove from dropdown:else");
             removeHyperlink(Integer.valueOf(newSelection));
             drawLink(Integer.valueOf(newSelection));
+            hyperlinkName.setText(hyperlinkArr[curHyperlinkNum].name);
         }
     }
     
@@ -278,8 +280,8 @@ public class createVideoGUI {
             hyperlinkArr[curHyperlinkNum].registerCoords(vid1FrameNum);
             hyperlinkArr[curHyperlinkNum].name = hyperlinkName.getText();
             hyperlinkArr[curHyperlinkNum].destVidURL = video2URL;
-            hyperlinkArr[curHyperlinkNum].srcFrameNo[hyperlinkArr[curHyperlinkNum].pos] = vid1FrameNum;
-            hyperlinkArr[curHyperlinkNum].destFrameNo[hyperlinkArr[curHyperlinkNum].pos] = vid2FrameNum;
+            (hyperlinkArr[curHyperlinkNum].srcFrameNo).set(hyperlinkArr[curHyperlinkNum].pos,vid1FrameNum);
+            (hyperlinkArr[curHyperlinkNum].destFrameNo).set(hyperlinkArr[curHyperlinkNum].pos,vid2FrameNum);
             hyperlinkArr[curHyperlinkNum].printLinks();
             
             // re-enable create-link button ??

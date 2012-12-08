@@ -4,6 +4,7 @@
  */
 package mulproj;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -14,44 +15,56 @@ public class Hyperlink {
     ResizeRectangle link;
     String name;
     int pos;
-    double[] nwXc, nwYc;
-    double[] seXc, seYc;
-    Integer[] srcFrameNo;
-    Integer[] destFrameNo;
+    ArrayList<Double> nwXc, nwYc, seXc, seYc;
+    ArrayList<Integer> srcFrameNo, destFrameNo;
     String destVidURL;
     Boolean connected;
 
     public Hyperlink() {
+        this.nwYc = new ArrayList<Double>();
+        this.nwXc = new ArrayList<Double>();
+        this.seYc = new ArrayList<Double>();
+        this.seXc = new ArrayList<Double>();
         this.connected = false;
         this.link = new ResizeRectangle(50,50,150,100);
-        this.nwXc = new double[20];
-        this.nwYc = new double[20];
-        this.seXc = new double[20];
-        this.seYc = new double[20];
-        this.srcFrameNo = new Integer[20];
-        this.destFrameNo = new Integer[20];
+        this.srcFrameNo = new ArrayList<Integer>();
+        this.destFrameNo = new ArrayList<Integer>();
         this.pos = -1;
     }
     
     public void registerCoords(int frame) {
+        Boolean newFrame = false;
         if(pos == -1) {
+            newFrame = true;
             pos = 0; // first link ever
         } else {
             // we need to find out if there is an existing link on this frame
-            int oldpos = Arrays.asList(srcFrameNo).indexOf(frame);
+            int oldpos = srcFrameNo.indexOf(frame);
             if(oldpos == -1) {
+                newFrame = true;
                 System.out.println(oldpos+" not found");
                 // no previous link on this frame number
                 pos++;
             } else {
+                newFrame = false;
                 System.out.println(oldpos+" found");
                 pos = oldpos;
             }
         }
-        nwXc[pos] = link.points[0].getCenterX();
-        nwYc[pos] = link.points[0].getCenterY();
-        seXc[pos] = link.points[1].getCenterX();
-        seYc[pos] = link.points[1].getCenterY();
+        if(newFrame) {
+            nwXc.add(link.points[0].getCenterX());
+            nwYc.add(link.points[0].getCenterY());
+            seXc.add(link.points[1].getCenterX());
+            seYc.add(link.points[1].getCenterY());
+            // also add dummies to src and dest
+            srcFrameNo.add(frame);
+            destFrameNo.add(-1);
+        } else {
+            nwXc.set(pos,link.points[0].getCenterX());
+            nwYc.set(pos,link.points[0].getCenterY());
+            seXc.set(pos,link.points[1].getCenterX());
+            seYc.set(pos,link.points[1].getCenterY());
+        }
         connected = true;
     }
     
@@ -59,10 +72,10 @@ public class Hyperlink {
         System.out.println(destVidURL);
         System.out.println(name);
         for(int i=0;i<=pos;i++) {
-            System.out.println("nw: "+nwXc[i]+","+nwYc[i]);
-            System.out.println("se: "+seXc[i]+","+seYc[i]);
-            System.out.println("sf: "+srcFrameNo[i]);
-            System.out.println("df: "+destFrameNo[i]);
+            System.out.println("nw: "+nwXc.get(i)+","+nwYc.get(i));
+            System.out.println("se: "+seXc.get(i)+","+seYc.get(i));
+            System.out.println("sf: "+srcFrameNo.get(i));
+            System.out.println("df: "+destFrameNo.get(i));
         }
     }
     
