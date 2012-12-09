@@ -16,7 +16,8 @@ public class Hyperlink {
     String name;
     int pos;
     ArrayList<Double> nwXc, nwYc, seXc, seYc;
-    ArrayList<Integer> srcFrameNo, destFrameNo;
+    ArrayList<Integer> srcFrameNo;
+    Integer destFrameNo;
     String destVidURL;
     Boolean connected;
 
@@ -28,7 +29,6 @@ public class Hyperlink {
         this.connected = false;
         this.link = new ResizeRectangle(50,50,150,100);
         this.srcFrameNo = new ArrayList<Integer>();
-        this.destFrameNo = new ArrayList<Integer>();
         this.pos = -1;
     }
     
@@ -58,7 +58,6 @@ public class Hyperlink {
             seYc.add(link.points[1].getCenterY());
             // also add dummies to src and dest
             srcFrameNo.add(frame);
-            destFrameNo.add(-1);
         } else {
             nwXc.set(pos,link.points[0].getCenterX());
             nwYc.set(pos,link.points[0].getCenterY());
@@ -71,11 +70,11 @@ public class Hyperlink {
     public void printLinks() {
         System.out.println(destVidURL);
         System.out.println(name);
+        System.out.println(destFrameNo);
         for(int i=0;i<=pos;i++) {
             System.out.println("nw: "+nwXc.get(i)+","+nwYc.get(i));
             System.out.println("se: "+seXc.get(i)+","+seYc.get(i));
             System.out.println("sf: "+srcFrameNo.get(i));
-            System.out.println("df: "+destFrameNo.get(i));
         }
     }
     

@@ -6,7 +6,9 @@ package mulproj;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -281,7 +283,7 @@ public class createVideoGUI {
             hyperlinkArr[curHyperlinkNum].name = hyperlinkName.getText();
             hyperlinkArr[curHyperlinkNum].destVidURL = video2URL;
             (hyperlinkArr[curHyperlinkNum].srcFrameNo).set(hyperlinkArr[curHyperlinkNum].pos,vid1FrameNum);
-            (hyperlinkArr[curHyperlinkNum].destFrameNo).set(hyperlinkArr[curHyperlinkNum].pos,vid2FrameNum);
+            hyperlinkArr[curHyperlinkNum].destFrameNo = vid2FrameNum;
             hyperlinkArr[curHyperlinkNum].printLinks();
             
             // re-enable create-link button ??
@@ -364,7 +366,46 @@ public class createVideoGUI {
     }
     
     private void saveFileBtnMouseClicked(java.awt.event.MouseEvent evt) {
-        
+        try{
+            // Create file 
+            statusLabel.setText("Saving File....");
+            FileWriter fstream = new FileWriter("C:\\Users\\Hardik\\Desktop\\out.txt");
+            BufferedWriter out = new BufferedWriter(fstream,32768);
+            
+            System.out.println("numlinks: "+numHyperlinks);
+            String[] origFile;
+            String fileName;
+            // iterate hyperlinkArr
+            for(int i=0;i<numHyperlinks;i++) {
+                origFile = hyperlinkArr[i].destVidURL.split("\\\\");
+                fileName = origFile[origFile.length-1];
+                out.write(i+" "+hyperlinkArr[i].name+" "+hyperlinkArr[i].srcFrameNo.size());
+                out.newLine();
+                out.write(fileName+" "+hyperlinkArr[i].destFrameNo);
+                out.newLine();
+                for(int j=0;j<hyperlinkArr[i].srcFrameNo.size();j++) {
+                    out.write((hyperlinkArr[i].srcFrameNo).get(j)+" ");
+                    out.write(hyperlinkArr[i].nwXc.get(j).intValue()+" "+hyperlinkArr[i].nwYc.get(j).intValue()+" ");
+                    out.write(hyperlinkArr[i].seXc.get(j).intValue()+" "+hyperlinkArr[i].seYc.get(j).intValue());
+                    out.newLine();
+                }
+            }
+//            for(int i=0;i<numHyperlinks;i++) {
+//                out.write(i+" "+hyperlinkArr[i].name+" "+hyperlinkArr[i].srcFrameNo.size()+"\n");
+//                out.write(hyperlinkArr[i].destVidURL+" "+hyperlinkArr[i].destFrameNo+"\n");
+//                for(int j=0;j<hyperlinkArr[i].srcFrameNo.size();j++) {
+//                    out.write(hyperlinkArr[i].srcFrameNo.get(i)+" ");
+//                    out.write(hyperlinkArr[i].nwXc.get(i)+" "+hyperlinkArr[i].nwYc.get(i)+" ");
+//                    out.write(hyperlinkArr[i].seXc.get(i)+" "+hyperlinkArr[i].seYc.get(i)+"\n");
+//                }
+//            }
+            out.close();
+            statusLabel.setText("File Saved!");
+        }
+        catch (Exception e){
+            System.err.println("File Write Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
    
     
