@@ -373,7 +373,9 @@ public class createVideoGUI {
         try{
             // Create file 
             statusLabel.setText("Saving File....");
-            FileWriter fstream = new FileWriter("C:\\Users\\Hardik\\Desktop\\out.txt");
+            String[] srcFileArr = video1URL.split("\\\\");
+            String srcFileName = srcFileArr[srcFileArr.length-1];
+            FileWriter fstream = new FileWriter(srcFileName+".meta");
             BufferedWriter out = new BufferedWriter(fstream,32768);
             
             System.out.println("numlinks: "+numHyperlinks);
