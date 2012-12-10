@@ -244,6 +244,10 @@ public class createVideoGUI {
             removeHyperlink(Integer.valueOf(newSelection));
             drawLink(Integer.valueOf(newSelection));
             hyperlinkName.setText(hyperlinkArr[curHyperlinkNum].name);
+            if(hyperlinkArr[curHyperlinkNum].srcFrameNo.size() > 0) {
+                jSlider1.setValue(hyperlinkArr[curHyperlinkNum].srcFrameNo.get(0));
+                jSlider2.setValue(hyperlinkArr[curHyperlinkNum].destFrameNo.intValue());
+            }
         }
     }
     
@@ -288,7 +292,7 @@ public class createVideoGUI {
             
             // re-enable create-link button ??
             addHyperlinkBtn.setEnabled(true);
-            
+            statusLabel.setText("Videos Connected!");
         }
     }
    
@@ -467,6 +471,7 @@ public class createVideoGUI {
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
             //java.io.File file = jFileChooser.getSelectedFile();
             video1URL = jFileChooser.getSelectedFile().toString(); //file.toString();
+            statusLabel.setText("Opening Source Video.... Please Wait..");
             AuthoringTool.videoLoaded(video1URL,vidType.SOURCE);
             AuthoringTool.showFrameSrc(0);
             setSlider1Range((int)AuthoringTool.NUMFRAMES_VID1-1);
@@ -478,6 +483,7 @@ public class createVideoGUI {
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
             //java.io.File file = jFileChooser.getSelectedFile();
             video2URL = jFileChooser.getSelectedFile().toString(); //file.toString();
+            statusLabel.setText("Opening Destination Video.... Please Wait..");
             AuthoringTool.videoLoaded(video2URL,vidType.DEST);
             AuthoringTool.showFrameDest(0);
             setSlider2Range((int)AuthoringTool.NUMFRAMES_VID1-1);
