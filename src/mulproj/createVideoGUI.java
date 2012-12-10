@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Arrays;
 
 /**
  *
@@ -73,7 +74,7 @@ public class createVideoGUI {
         hyperlinkDropdown = new JComboBox();
         addHyperlinkBtn = new JButton();
         hyperlinkName = new JTextField();
-        hyperlinkArr = new Hyperlink[20];
+        hyperlinkArr = new Hyperlink[200];
         
         initialGUISetup();
         setupMenu();
@@ -232,21 +233,23 @@ public class createVideoGUI {
         // TODO add your handling code here:
         JComboBox cb = (JComboBox)evt.getSource();
         String newSelection;
-        newSelection = String.valueOf(cb.getSelectedItem());
-        System.out.println("New selection: "+newSelection);
-        if(newSelection.equals("None")) {
-            System.out.println("Calling remove from dropdown:none");
-            removeHyperlink(-1);
-            hyperlinkName.setText(" ");
-        } else {
-            // user has selected a previously created link
-            System.out.println("Calling remove from dropdown:else");
-            removeHyperlink(Integer.valueOf(newSelection));
-            drawLink(Integer.valueOf(newSelection));
-            hyperlinkName.setText(hyperlinkArr[curHyperlinkNum].name);
-            if(hyperlinkArr[curHyperlinkNum].srcFrameNo.size() > 0) {
-                jSlider1.setValue(hyperlinkArr[curHyperlinkNum].srcFrameNo.get(0));
-                jSlider2.setValue(hyperlinkArr[curHyperlinkNum].destFrameNo.intValue());
+        if(hyperlinkDropdown.getItemCount() > 1) {
+            newSelection = String.valueOf(cb.getSelectedItem());
+            System.out.println("New selection: "+newSelection);
+            if(newSelection.equals("None")) {
+                System.out.println("Calling remove from dropdown:none");
+                removeHyperlink(-1);
+                hyperlinkName.setText(" ");
+            } else {
+                // user has selected a previously created link
+                System.out.println("Calling remove from dropdown:else");
+                removeHyperlink(Integer.valueOf(newSelection));
+                drawLink(Integer.valueOf(newSelection));
+                hyperlinkName.setText(hyperlinkArr[curHyperlinkNum].name);
+                if(hyperlinkArr[curHyperlinkNum].srcFrameNo.size() > 0) {
+                    jSlider1.setValue(hyperlinkArr[curHyperlinkNum].srcFrameNo.get(0));
+                    jSlider2.setValue(hyperlinkArr[curHyperlinkNum].destFrameNo.intValue());
+                }
             }
         }
     }
@@ -472,6 +475,19 @@ public class createVideoGUI {
         int returnVal = jFileChooser.showOpenDialog(frame);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
             //java.io.File file = jFileChooser.getSelectedFile();
+            // reset videos
+            System.gc();
+            hyperlinkDropdown.removeAllItems();
+            hyperlinkDropdown.addItem("None");
+            
+            for(int i=0;i<numHyperlinks;i++) {
+               hyperlinkArr[i] = null;
+            }
+            video1Label.removeAll();
+            
+            numHyperlinks = 0;
+            curHyperlinkNum = -1;
+            
             video1URL = jFileChooser.getSelectedFile().toString(); //file.toString();
             statusLabel.setText("Opening Source Video.... Please Wait..");
             AuthoringTool.videoLoaded(video1URL,vidType.SOURCE);
